@@ -90,7 +90,12 @@ export default {
 			alert('Cache, LocalStorage, and Cookies cleared!');
 		},
 	},
-};
+
+
+	mounted() {
+		document.title = `CoolAPI${this.$route.name ? ` - ${this.$route.name}` : ''}`;
+	}
+}
 </script>
 
 <style scoped>

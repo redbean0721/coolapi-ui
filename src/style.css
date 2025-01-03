@@ -602,6 +602,20 @@ body {
     border-left: 10px solid var(--danger);
 }
 
+
+.content main .bottom-data .reminders .task-list li.alert-critical {
+    border-left: 10px solid var(--danger);
+}
+
+.content main .bottom-data .reminders .task-list li.alert-caution {
+    border-left: 10px solid var(--warning);
+}
+
+.content main .bottom-data .reminders .task-list li.alert-info {
+    border-left: 10px solid var(--success);
+}
+
+
 .content main .bottom-data .reminders .task-list li:last-child {
    margin-bottom: 0;
 }

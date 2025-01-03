@@ -5,11 +5,11 @@ const routes = [
 	{ path: '/', name: 'Home', component: () => import('./views/Home.vue') },
     { path: '/image', name: 'Image', component: () => import('./views/Image.vue') },
     { path: '/status', name: 'Status', component: () => import('./views/Status.vue') },
-    { path: '/command', name: 'Command', component: () => import('./views/Command.vue') },
+    { path: '/minecraft', name: 'Command', component: () => import('./views/Minecraft.vue') },
     { path: '/users', name: 'Users', component: () => import('./views/Users.vue') },
     { path: '/settings', name: 'Settings', component: () => import('./views/Settings.vue') },
     { path: '/login', name: 'Login', component: () => import('./views/Login.vue') },
-    { path: '/dashboard', name: 'dashboard', component: () => import('./views/Dashboard.vue') },
+    { path: '/dashboard', name: 'Dashboard', component: () => import('./views/Dashboard.vue') },
 ];
 
 // 創建路由器 (使用 history 模式)

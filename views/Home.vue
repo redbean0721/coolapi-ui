@@ -42,13 +42,86 @@
 	<!-- End of Insights -->
 
 	<div class="bottom-data">
-		<div class="orders">
-		<div class="header">
-			<i class='bx bx-receipt'></i>
-			<h3>Recent Orders</h3>
-			<i class='bx bx-filter'></i>
-		<i class='bx bx-search'></i>
+		<!-- Reminders -->
+		<div class="reminders">
+			<div class="header">
+				<i class='bx bx-note'></i>
+				<!-- <i class='bx bxs-megaphone' ></i> -->
+				<h3>Site Announcement</h3>
+				<i class='bx bx-filter'></i>
+				<i class='bx bx-plus'></i>
+			</div>
+			<ul class="task-list">
+				<li class="alert-critical">
+					<div class="task-title">
+						<i class='bx bx-check-circle'></i>
+						<p>Emergency Notice: System Maintenance in Progress!</p>
+					</div>
+					<i class='bx bx-dots-vertical-rounded'></i>
+				</li>
+				<li class="alert-caution">
+					<div class="task-title">
+						<i class='bx bx-check-circle'></i>
+						<p>Reminder: Upcoming Version Update.</p>
+					</div>
+					<i class='bx bx-dots-vertical-rounded'></i>
+				</li>
+				<li class="alert-info">
+					<div class="task-title">
+						<i class='bx bx-x-circle'></i>
+						<p>Update Successful: Features are Now Live.</p>
+					</div>
+					<i class='bx bx-dots-vertical-rounded'></i>
+				</li>
+			</ul>
 		</div>
+
+		<div class="orders">
+			<div class="header">
+				<!-- <i class='bx bx-receipt'></i> -->
+				<i class='bx bxs-bar-chart-alt-2'></i>
+				<h3>API Counters</h3>
+				<i class='bx bx-filter'></i>
+				<i class='bx bx-search'></i>
+			</div>
+			<table>
+				<thead>
+					<tr>
+						<th>Counter Name</th>
+						<th>Last updated</th>
+						<th>Count</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- <img src="/images/profile-1.jpg"> -->
+							<p>Random Image</p>
+						</td>
+						<td>2024-12-31 16:44:59</td>
+						<!-- <td><span class="status completed">Completed</span></td> -->
+						<td><span>3896</span></td>
+					</tr>
+					<tr>
+						<td>
+							<!-- <img src="/images/profile-1.jpg"> -->
+							<p>Minecraft API</p>
+						</td>
+						<td>2024-05-14 23:51:40</td>
+						<!-- <td><span class="status pending">Pending</span></td> -->
+						<td><span>0</span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="orders">
+			<div class="header">
+				<i class='bx bx-receipt'></i>
+				<h3>Recent Orders</h3>
+				<i class='bx bx-filter'></i>
+				<i class='bx bx-search'></i>
+			</div>
 			<table>
 				<thead>
 					<tr>
@@ -85,39 +158,36 @@
 				</tbody>
 			</table>
 		</div>
-
-		<!-- Reminders -->
-		<div class="reminders">
-			<div class="header">
-				<i class='bx bx-note'></i>
-				<h3>Remiders</h3>
-				<i class='bx bx-filter'></i>
-				<i class='bx bx-plus'></i>
-			</div>
-			<ul class="task-list">
-				<li class="completed">
-					<div class="task-title">
-						<i class='bx bx-check-circle'></i>
-						<p>Start Our Meeting</p>
-					</div>
-					<i class='bx bx-dots-vertical-rounded'></i>
-				</li>
-				<li class="completed">
-					<div class="task-title">
-						<i class='bx bx-check-circle'></i>
-						<p>Analyse Our Site</p>
-					</div>
-					<i class='bx bx-dots-vertical-rounded'></i>
-				</li>
-				<li class="not-completed">
-					<div class="task-title">
-						<i class='bx bx-x-circle'></i>
-						<p>Play Footbal</p>
-					</div>
-					<i class='bx bx-dots-vertical-rounded'></i>
-				</li>
-			</ul>
-		</div>
 		<!-- End of Reminders-->
 	</div>
 </template>
+
+<style scoped>
+html {
+    overflow: -moz-hidden-unscrollable;
+    height: 100%;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    -ms-overflow-style: none;
+    height: 100%;
+	width: calc(100vw + 18px);
+	overflow: auto;
+}
+
+.content main .bottom-data .reminders {
+  	flex-basis: 100%; /* 這樣讓 reminders 佔據一整行 */
+}
+</style>
+
+<script>
+export default {
+	mounted() {
+		document.title = `CoolAPI`;
+	}
+};
+</script>

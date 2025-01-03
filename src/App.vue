@@ -13,7 +13,7 @@
 			<li :class="{ active: route.path === '/' }"><router-link to="/"><i class='bx bxs-home'></i>Home</router-link></li>
 			<li :class="{ active: route.path === '/image' }"><router-link to="/image"><i class='bx bxs-image'></i>Image</router-link></li>
 			<li :class="{ active: route.path === '/status' }"><router-link to="/status"><i class='bx bx-line-chart'></i>Status</router-link></li>
-			<li :class="{ active: route.path === '/command' }"><router-link to="/command"><i class='bx bx-code-alt'></i>Command</router-link></li>
+			<li :class="{ active: route.path === '/minecraft' }"><router-link to="/minecraft"><i class='bx bx-code-alt'></i>Minecraft</router-link></li>
 			<li :class="{ active: route.path === '/users' }"><router-link to="/users"><i class='bx bx-group'></i>Users</router-link></li>
 			<li :class="{ active: route.path === '/settings' }"><router-link to="/settings"><i class='bx bx-cog'></i>Settings</router-link></li>
 		</ul>

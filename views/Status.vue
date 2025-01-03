@@ -10,3 +10,11 @@
 		</div>
     </div>
 </template>
+
+<script>
+export default {
+	mounted() {
+		document.title = `CoolAPI${this.$route.name ? ` - ${this.$route.name}` : ''}`;
+	}
+};
+</script>
