@@ -1,5 +1,18 @@
-# Vue 3 + Vite
+# CoolAPI-UI
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## UI Version
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+Current UI version: 2.0.1-dev
+
+## Reference
+
+This UI design is inspired by the following GitHub repository:  
+[https://github.com/your-reference-link](https://github.com/your-reference-link)
+
+## Previous Version
+
+The previous version of this project is archived and has been moved to a private GitHub repository. You can view the archived repository here:
+
+[Old CoolAPI Project (Private)](https://github.com/your-username/old-coolapi)
+
+This repository was initially used for earlier development and has since been preserved for reference.
