@@ -83,14 +83,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.sidebar .apiVersion {
-    color: var(--dark);
-    text-align: center;
-    transition: all 0.3s ease;
-	margin-top: -15px;
-	margin-left: -15px;
-	margin-bottom: -2.5px;
-}
-</style>

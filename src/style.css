@@ -10,6 +10,7 @@
     --danger: #D32F2F;
 	--light-danger: #FECDD3;
     --warning: #FBC02D;
+    --red-warning: red;
     --light-warning: #FFF2C6;
     --success: #388E3C;
     --light-success: #BBF7D0;
@@ -22,6 +23,17 @@
     padding: 0;
     box-sizing: border-box;
     /* font-family: 'Poppins', sans-serif; */
+}
+
+.warning {
+    color: var(--red-warning);
+    font-weight: bold;
+}
+
+code {
+    background-color: var(--grey); /* 程式碼塊的背景色 */
+    padding: 0.2rem 0.4rem; /* 添加內邊距 */
+    border-radius: 4px; /* 圓角 */
 }
 
 .bx {
@@ -64,6 +76,15 @@ body {
     transition: all 0.3s ease;
 }
 
+.sidebar .apiVersion {
+    color: var(--dark);
+    text-align: center;
+    transition: all 0.3s ease;
+	margin-top: -15px;
+	margin-left: -15px;
+	margin-bottom: -2.5px;
+}
+
 .sidebar .copyright {
     position: absolute; /*絕對定位*/
     bottom: 2%; /*離底部高度*/
@@ -97,6 +118,10 @@ body {
 .sidebar .copyright a:hover::after {
     width: 100%;
     left: 50%;
+}
+
+.sidebar.close .apiVersion {
+    display: none;  /*隱藏元素*/
 }
 
 .sidebar.close .copyright {
@@ -500,6 +525,31 @@ body {
 .content main .bottom-data .orders {
     flex-grow: 1;
     flex-basis: 500px;
+}
+
+.content main .bottom-data .orders a {
+    color: var(--link-red);
+    position: relative; /* 為了讓伪元素定位基於這個元素 */
+    text-decoration: none; /* 去掉默認底線 */
+}
+
+/* 添加伪元素 ::after */
+.content main .bottom-data .orders a::after {
+    content: ''; /* 必須為伪元素添加內容 */
+    position: absolute;
+    bottom: -2px; /* 底線距離文字的距離 */
+    left: 50%; /* 起點設置為中間 */
+    width: 0; /* 初始寬度為0 */
+    height: 1px; /* 底線高度 */
+    background-color: var(--link-red); /* 底線顏色 */
+    transition: width 0.2s ease, left 0.2s ease; /* 添加平滑過渡效果 */
+    transform: translateX(-50%); /* 水平居中 */
+}
+
+/* 當滑鼠移到鏈接時 */
+.content main .bottom-data .orders a:hover::after {
+    width: 100%; /* 底線展開到整個文字寬度 */
+    left: 50%; /* 起點回到左側 */
 }
 
 .content main .bottom-data .orders table {

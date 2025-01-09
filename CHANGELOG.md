@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.2-dev] - 2025-01-09
+### Added
+- Completed the content for the `Image.vue` page, turning its basic structure into a fully functional page
+
+### Changed
+- Moved styles from `App.vue` to `style.css`
+- Removed the header from `Home.vue`
+
+
 ## [2.0.1-dev] - 2025-01-04
 ### Added
 - Added `changelog.md` to track project changes.

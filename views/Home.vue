@@ -1,5 +1,5 @@
 <template>
-    <div class="header">
+    <!-- <div class="header">
 		<div class="left">
 			<h1>Home</h1>
 			<ul class="breadcrumb">
@@ -8,10 +8,10 @@
 				<li><a href="#" class="active">Home</a></li>
 			</ul>
 		</div>
-    </div>
+    </div> -->
 
 	<!-- Insights -->
-	<ul class="insights">
+	<ul class="insights" style="margin-top: -5px;">
 		<li>
 			<i class='bx bx-calendar-check'></i>
 			<span class="info">
