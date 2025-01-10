@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.3-dev] - 2025-01-10
+
+### Changed
+- **Minecraft Menu**: Removed the `Minecraft.vue` component and split its functionality into two new components:
+  - Added `MCStatus.vue` to handle the Minecraft status page.
+  - Added `MCRcon.vue` to handle the Minecraft RCON page.
+- **Navigation Bar Update**: Replaced the `Minecraft` `router-link` with a menu containing two sub-options:
+  - `Status`: Links to the `/minecraft/status` page.
+  - `RCON`: Links to the `/minecraft/rcon` page.
+- **Minecraft Menu Toggle**: Implemented automatic expansion or collapse of the Minecraft menu based on the current route.
+
+
 ## [2.0.2-dev] - 2025-01-09
 ### Added
 - Completed the content for the `Image.vue` page, turning its basic structure into a fully functional page
