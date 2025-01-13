@@ -73,6 +73,7 @@
 						<th></th>
 						<th>參數</th>
 						<th>說明</th>
+                        <th>資料類型</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -80,6 +81,7 @@
 						<td><p>1</p></td>
 						<td>type</td>
 						<td>填 <code>json</code> 則返回一串數據, 不填則返回一張圖片</td>
+						<td>string</td>
 					</tr>
 				</tbody>
 			</table>
@@ -88,7 +90,7 @@
 		<div class="orders">
 			<div class="header">
 				<i class='bx bx-redo title'></i>
-				<h3 class="title">返回數據</h3>
+				<h3 class="title">返回數據 (類型使用 json)</h3>
 				<i class='bx bx-filter'></i>
 				<i class='bx bx-search'></i>
 			</div>
@@ -98,6 +100,7 @@
 						<th></th>
 						<th>數據</th>
 						<th>說明</th>
+                        <th>資料類型</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -105,36 +108,43 @@
 						<td><p>1</p></td>
 						<td>_id</td>
 						<td>圖片 Hash</td>
+						<td>string</td>
 					</tr>
 					<tr>
 						<td><p>2</p></td>
 						<td>id</td>
 						<td>圖片 ID</td>
+						<td>int</td>
 					</tr>
 					<tr>
 						<td><p>3</p></td>
 						<td>url</td>
 						<td>圖床位置</td>
+						<td>string</td>
 					</tr>
 					<tr>
 						<td><p>4</p></td>
 						<td>size</td>
-						<td>圖片大小</td>
+						<td>圖片大小 (mb)</td>
+						<td>float</td>
 					</tr>
 					<tr>
 						<td><p>5</p></td>
 						<td>fileName</td>
 						<td>檔案名稱</td>
+						<td>string</td>
 					</tr>
 					<tr>
 						<td><p>6</p></td>
 						<td>updateAt</td>
-						<td>上傳日期</td>
+						<td>上傳日期 (Unix timestamp)</td>
+						<td>int</td>
 					</tr>
 					<tr>
 						<td><p>7</p></td>
 						<td>origin</td>
 						<td>圖片來源</td>
+						<td>string</td>
 					</tr>
 				</tbody>
 			</table>

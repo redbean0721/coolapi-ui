@@ -1,7 +1,14 @@
 # Changelog
 
-## [2.0.3-dev] - 2025-01-10
+## [2.0.4-dev] - 2025-01-13
+### Added
+- Completed the content for the `Image.vue` page, turning its basic structure into a fully functional page
 
+### Changed
+- Added data type definitions in `MCStatus.vue` to improve clarity and structure.
+
+
+## [2.0.3-dev] - 2025-01-10
 ### Changed
 - **Minecraft Menu**: Removed the `Minecraft.vue` component and split its functionality into two new components:
   - Added `MCStatus.vue` to handle the Minecraft status page.
