@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.5-dev] - 2025-01-15  
+
+### Added
+- Completed the content for the `MCRcon.vue` page, turning its basic structure into a fully functional page
+- Added build automation to update the version number in `README.md` during the build process.
+- Added UI version display at the bottom of the navigation bar in `App.vue`.
+
+### Changed
+- Renamed variables in `apiVersion.js` for better readability and consistency.
+
+
 ## [2.0.4-dev] - 2025-01-13
 ### Added
 - Completed the content for the `Image.vue` page, turning its basic structure into a fully functional page

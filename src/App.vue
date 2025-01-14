@@ -7,7 +7,7 @@
 		</a>
 		<!-- 顯示 API 版本 -->
 		<div class="apiVersion">
-			<strong><p>Version: {{ version }}</p></strong>
+			<strong><p>API Version: {{ apiVersion }}</p></strong>
 		</div>
 		<ul class="side-menu">
 			<li :class="{ active: route.path === '/' }"><router-link to="/"><i class='bx bxs-home'></i>Home</router-link></li>
@@ -32,6 +32,7 @@
 			</li>
 		</ul>
 		<div class="copyright">
+			<p>UI Version: {{ uiVersion }}</p>
 			<p>版權所有 &copy; 2024</p>
 			<strong><a href="https://redbean0721.com" target="_blank">redbean0721.com</a></strong>
 		</div>
@@ -69,7 +70,7 @@
 </template>
 
 <script>
-import { getApiVersion, version } from './assets/js/apiVersion';
+import { getApiVersion, apiVersion } from './assets/js/apiVersion';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -102,10 +103,11 @@ export default {
     });
 
     return {
-      version,  // 返回響應式的 version
-      route,    // 返回 route 以便在模板中使用
-	  minecraftOpen,
-	  toggleMinecraftMenu
+		apiVersion,  // 返回響應式的 version
+		route,    // 返回 route 以便在模板中使用
+	  	minecraftOpen,
+	  	toggleMinecraftMenu,
+	  	uiVersion: __UI_VERSION__,
     };
   },
 };

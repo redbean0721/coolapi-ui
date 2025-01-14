@@ -2,7 +2,7 @@ import axios from "axios";
 import { ref } from "vue";
 
 // 创建一个响应式的 version 变量，初始值为 "loading..."
-const version = ref("loading...");
+const apiVersion = ref("loading...");
 
 // 创建一个函数来加载 API 版本
 export async function getApiVersion() {
@@ -11,15 +11,15 @@ export async function getApiVersion() {
     const response = await axios.get("https://api.redmc.xyz/openapi.json");
     
     // 如果请求成功，更新 version 的值
-    version.value = response.data.info.version;
+    apiVersion.value = response.data.info.version;
   } catch (error) {
     // 错误处理，更新 version 为失败信息
     console.error("Failed to load version: ", error);
-    version.value = "Failed to load";
+    apiVersion.value = "Failed to load";
   }
 }
 
-export { version };
+export { apiVersion };
 
 
 
