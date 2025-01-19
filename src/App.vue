@@ -24,12 +24,7 @@
 			<li :class="{ active: route.path === '/settings' }"><router-link to="/settings"><i class='bx bx-cog'></i>Settings</router-link></li>
 		</ul>
 		<ul class="side-menu">
-			<li>
-				<a href="#" class="logout">
-					<i class='bx bx-log-in'></i>
-					Login
-				</a>
-			</li>
+			<li :class="{ active: route.path === '/login' }"><router-link to="/login"><i class='bx bx-log-in'></i>Login</router-link></li>
 		</ul>
 		<div class="copyright">
 			<p>UI Version: {{ uiVersion }}</p>

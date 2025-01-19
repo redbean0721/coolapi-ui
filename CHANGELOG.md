@@ -1,7 +1,15 @@
 # Changelog
 
-## [2.0.5-dev] - 2025-01-15  
+## [2.0.6-dev] - 2025-01-19
+### Added
+- Completed the content for the `Login.vue`, `Register.vue` and `ResetPassword.vue` page, turning its basic structure into a fully functional page
+- Added a floating message box to display error messages.
 
+### Changed
+- Adjusted the login button in `App.vue`.
+
+
+## [2.0.5-dev] - 2025-01-15  
 ### Added
 - Completed the content for the `MCRcon.vue` page, turning its basic structure into a fully functional page
 - Added build automation to update the version number in `README.md` during the build process.

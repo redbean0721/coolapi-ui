@@ -10,6 +10,8 @@ const routes = [
     { path: '/users', name: 'Users', component: () => import('./views/Users.vue') },
     { path: '/settings', name: 'Settings', component: () => import('./views/Settings.vue') },
     { path: '/login', name: 'Login', component: () => import('./views/Login.vue') },
+    { path: '/register', name: 'Register', component: () => import('./views/Register.vue') },
+    { path: '/reset-password', name: 'ResetPassword', component: () => import('./views/ResetPassword.vue') },
     { path: '/dashboard', name: 'Dashboard', component: () => import('./views/Dashboard.vue') },
 ];
 

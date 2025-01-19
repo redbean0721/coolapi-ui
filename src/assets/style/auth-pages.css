@@ -1,0 +1,163 @@
+.login-container {
+	display: flex;
+	justify-content: center;
+	position: relative; /* 讓子元素以此作為定位基準 */
+}
+
+.login-box {
+	padding: 0 10.5%;
+	margin-top: 25px;
+	border-radius: 20px;
+	background-color: var(--light);
+}
+
+form {
+	margin-top: 55px;
+	width: 750px;
+}
+
+.input-field {
+	width: 100%;
+	height: 55px;
+	margin-bottom: 30px;
+	text-align: center;
+	border: none;
+	font-size: 16px;
+	font-weight: bolder;
+	border-radius: 5px;
+	color: var(--dark);
+	background-color: var(--grey);
+}
+
+.click-group {
+	text-align: center;
+}
+
+.checkbox-group {
+	margin-bottom: 35px;
+	color: var(--dark);
+	font-size: 18px;
+	
+}
+
+.checkbox-group input {
+	transform: scale(1.5);
+}
+
+.checkbox-group a {
+    color: var(--primary);
+    text-decoration: none; /* 取消預設底線 */
+    position: relative;
+	font-weight: bolder;
+}
+
+.checkbox-group a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -2px; /* 調整底線與文字的距離 */
+    width: 0;
+    height: 1px;
+    background-color: var(--primary); /* 底線顏色 */
+    transition: width 0.2s ease, left 0.2s ease;
+    transform: translateX(-50%);
+}
+
+.checkbox-group a:hover::after {
+    width: 100%;
+    left: 50%;
+}
+
+.checkbox-group input {
+	margin-right: 15px;
+}
+
+.button-login {
+	display: flex;
+	justify-content: center;
+}
+
+.button-login button {
+	width: 60%;
+	height: 45px;
+	border: none;
+	border-radius: 5px;
+	font-size: 18px;
+	font-weight: bolder;
+	background-color: lightblue;
+	margin-bottom: 25px;
+}
+
+.button-login button:disabled {
+	background-color: #ccc; /* 禁用時的背景色 */
+	cursor: not-allowed; /* 禁用時的滑鼠圖示 */
+}
+
+.button-group {
+	display: flex;
+	justify-content: space-between;
+	width: 60%;
+	margin: 0 auto;
+	gap: 10px;
+}
+
+.button-group button a {
+	color: black;
+}
+
+.button-group button {
+	flex: 1;
+	height: 45px;
+	border: none;
+	border-radius: 5px;
+	margin-bottom: 80px;
+}
+
+.button.green {
+	background-color: var(--light-warning);
+}
+
+.button.red {
+    background-color: var(--light-success);
+}
+
+.button.blue {
+    background-color: var(--light-danger);
+}
+
+.modal {
+	position: absolute; /* 相對於最近的定位祖先 */
+	top: 65%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%; /* 滿足漂浮框可以完全置於 login-box */
+	height: 100%; 
+	z-index: 1000;
+	/* background-color: rgba(0, 0, 0, 0.5); */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal-content {
+	background-color: var(--light);
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal p {
+	margin-bottom: 20px;
+	font-size: 16px;
+	color: var(--dark);
+}
+
+.modal-close {
+	padding: 10px 20px;
+	background: var(--primary);
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
