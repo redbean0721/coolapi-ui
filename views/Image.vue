@@ -106,15 +106,15 @@
 				<tbody>
 					<tr>
 						<td><p>1</p></td>
-						<td>_id</td>
-						<td>圖片 Hash</td>
-						<td>string</td>
-					</tr>
-					<tr>
-						<td><p>2</p></td>
 						<td>id</td>
 						<td>圖片 ID</td>
 						<td>int</td>
+					</tr>
+					<tr>
+						<td><p>2</p></td>
+						<td>fileName</td>
+						<td>檔案名稱</td>
+						<td>string</td>
 					</tr>
 					<tr>
 						<td><p>3</p></td>
@@ -130,7 +130,7 @@
 					</tr>
 					<tr>
 						<td><p>5</p></td>
-						<td>fileName</td>
+						<td>tag</td>
 						<td>檔案名稱</td>
 						<td>string</td>
 					</tr>
@@ -157,9 +157,10 @@
 				<i class='bx bx-filter'></i>
 				<i class='bx bx-search'></i>
 			</div>
-			<h1>後端還沒做好:)</h1>
+			<!-- <h1>後端還沒做好:)</h1> -->
 			<div class="image-grid">
 				<!-- <img v-for="(image, index) in images" :key="index" :src="image" alt="最新上傳圖片"> -->
+				 <img v-for="image in images" :key="image.id" :src="image.url" :alt="image.fileName || '最新上傳圖片'">
 			</div>
 		</div>
 		<!-- End of Reminders-->
@@ -178,7 +179,7 @@ export default {
 		async fetchApiData() {
 			try {
 				// 替換為你的 API 地址
-				const response = await fetch("https://api.redmc.xyz/status");
+				const response = await fetch("https://api.redbean0721.com/api/status");
 				const data = await response.json();
 
 				// 提取 counter 數據並轉換為鍵值對
@@ -229,12 +230,12 @@ main .bottom-data .orders {
 
 .image-grid {
 	display: grid;
-	grid-template-columns: repeat(4, 1fr); /* 每行 3 張圖片 */
+	grid-template-columns: repeat(3, 1fr); /* 每行 3 張圖片 */
 	gap: 10px; /* 圖片之間的間距 */
 }
 
 .image-grid img {
-	width: 80%;
+	width: 95%;
 	height: auto;
 	border-radius: 8px; /* 圖片圓角 */
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影效果 */

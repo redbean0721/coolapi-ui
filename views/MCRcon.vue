@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div class="left">
-            <h1>MCStatus</h1>
+            <h1>MCRcon</h1>
             <ul class="breadcrumb">
                 <li><a href="#">CoolAPI</a></li>
                 /

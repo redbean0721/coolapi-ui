@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.0.7-dev] - 2025-05-14
+### Changed
+- Updated the year display in `App.vue` to be dynamic using JavaScript.
+- Modified the endpoint in `apiVersion.js` for retrieving the backend API version.
+- Corrected the title in `MCRcon.vue`.
+
+### Added
+- Completed the image display feature in `Image.vue` to show the latest uploaded picture.
+
+
 ## [2.0.6-dev] - 2025-01-19
 ### Added
 - Completed the content for the `Login.vue`, `Register.vue` and `ResetPassword.vue` page, turning its basic structure into a fully functional page

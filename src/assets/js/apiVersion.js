@@ -8,7 +8,7 @@ const apiVersion = ref("loading...");
 export async function getApiVersion() {
   try {
     // 使用 async/await 等待 axios 请求完成
-    const response = await axios.get("https://api.redmc.xyz/openapi.json");
+    const response = await axios.get("https://api.redbean0721.com/api/openapi.json");
     
     // 如果请求成功，更新 version 的值
     apiVersion.value = response.data.info.version;

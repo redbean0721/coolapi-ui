@@ -28,7 +28,7 @@
 		</ul>
 		<div class="copyright">
 			<p>UI Version: {{ uiVersion }}</p>
-			<p>版權所有 &copy; 2024</p>
+			<p>版權所有 &copy; {{ currentYear }}</p>
 			<strong><a href="https://redbean0721.com" target="_blank">redbean0721.com</a></strong>
 		</div>
 	</div>
@@ -73,6 +73,7 @@ export default {
   setup() {
     const route = useRoute();  // 獲取當前路由
 	const minecraftOpen = ref(false); // Minecraft 開關
+	const currentYear = ref(new Date().getFullYear()); // 新增一個 ref 來儲存年份
 
 	// 監聽路由變化，根據路由決定 Minecraft 選單是否展開
     const checkMinecraftMenu = () => {
@@ -103,6 +104,7 @@ export default {
 	  	minecraftOpen,
 	  	toggleMinecraftMenu,
 	  	uiVersion: __UI_VERSION__,
+		currentYear, // 獲取當前年份
     };
   },
 };
