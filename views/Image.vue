@@ -173,6 +173,7 @@ export default {
 		return {
 			counterData: {}, // 用於存儲統計次數
 			isLoading: true, // 用於追踪加載狀態
+			images: [],
 		};
 	},
 	methods: {
