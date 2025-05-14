@@ -194,10 +194,30 @@ export default {
 				this.isLoading = false;
 			}
 		},
+		async fetchLatestImages() {
+			// 可以為圖片列表設置單獨的加載狀態，如果需要的話
+			// this.isImagesLoading = true;
+			try {
+				const response = await fetch("https://api.redbean0721.com/api/img/list?page=1&pageSize=12");
+				const data = await response.json();
+				if (data && data.status && data.data && data.data.imgs) {
+					this.images = data.data.imgs; // 假設 API 返回的圖片數據在 data.data.imgs 中
+				} else {
+					console.error("獲取圖片列表失敗或數據格式不正確:", data);
+					this.images = []; // 清空或設置預設圖片
+				}
+			} catch (error) {
+				console.error("最新上傳圖片 API 請求失敗：", error);
+				this.images = []; // 清空或設置預設圖片
+			} finally {
+				// this.isImagesLoading = false;
+			}
+		}
 	},
 	mounted() {
 		// 頁面加載時請求 API 數據
-		this.fetchApiData();
+		this.fetchApiData(); // 獲取狀態數據
+		this.fetchLatestImages(); // 新增：獲取最新上傳的圖片
 	},
 };
 </script>
