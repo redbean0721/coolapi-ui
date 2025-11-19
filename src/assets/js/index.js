@@ -3,6 +3,11 @@ const sideLinks = document.querySelectorAll('.sidebar .side-menu li a:not(.logou
 sideLinks.forEach(item => {
 	const li = item.parentElement;
     item.addEventListener('click', () => {
+        // 檢查是否為 Minecraft 父選項 (href="#" 的項目)
+        if (item.getAttribute('href') === '#') {
+            return; // 不處理 Minecraft 父選項
+        }
+        
         sideLinks.forEach(i => {
             i.parentElement.classList.remove('active');
         })
