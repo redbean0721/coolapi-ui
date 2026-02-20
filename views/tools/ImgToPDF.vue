@@ -39,9 +39,21 @@
 		<div v-if="images.length > 0" class="preview-area">
 			<div class="preview-header">
 				<h3>已選擇 {{ images.length }} 張圖片</h3>
-				<button @click="clearAll" class="btn-clear">
-					<i class="bx bx-trash"></i> 清除全部
-				</button>
+				<div class="header-actions">
+					<div class="auto-clear-options">
+						<label class="checkbox-label">
+							<input type="checkbox" v-model="autoClearImages" />
+							<span>轉換後清除圖片</span>
+						</label>
+						<label class="checkbox-label">
+							<input type="checkbox" v-model="autoClearPDF" />
+							<span>下載後自動清除</span>
+						</label>
+					</div>
+					<button @click="clearAll" class="btn-clear">
+						<i class="bx bx-trash"></i> 清除全部
+					</button>
+				</div>
 			</div>
 
 			<!-- 圖片列表 -->
@@ -125,6 +137,7 @@
 
 <script>
 import { ref, onMounted } from "vue";
+import jsPDF from "jspdf";
 
 // IndexedDB 操作
 const DB_NAME = "img2pdf_db";
@@ -203,6 +216,8 @@ export default {
 		const pdfUrl = ref(null);
 		const dragIndex = ref(null);
 		const previewIndex = ref(null);
+		const autoClearImages = ref(true); // 預設開啟：轉換後清除圖片
+		const autoClearPDF = ref(true); // 預設開啟：下載後自動清除
 
 		// 載入 IndexedDB 資料
 		const restoreImages = async () => {
@@ -269,31 +284,69 @@ export default {
 		const convertToPDF = async () => {
 			isConverting.value = true;
 			try {
-				// 這裡應該調用你的 API 來轉換圖片為 PDF
-				// 示例代碼 - 實際實現時需要連接到你的後端 API
-				
-				const formData = new FormData();
-				images.value.forEach((image, index) => {
-					formData.append("images", image.file);
+				// 創建 PDF 文檔（A4 尺寸）
+				const pdf = new jsPDF({
+					orientation: 'portrait',
+					unit: 'mm',
+					format: 'a4'
 				});
 
-				// 模擬 API 調用
-				// const response = await fetch("/api/convert/img2pdf", {
-				// 	method: "POST",
-				// 	body: formData
-				// });
-				// const blob = await response.blob();
-				// pdfUrl.value = URL.createObjectURL(blob);
+				const pageWidth = pdf.internal.pageSize.getWidth();
+				const pageHeight = pdf.internal.pageSize.getHeight();
+				const margin = 10; // 邊距 10mm
 
-				// 暫時使用模擬延遲
-				await new Promise(resolve => setTimeout(resolve, 2000));
-				
-				// 這裡需要實際的 API 調用
-				console.log("準備轉換的圖片:", images.value);
-				alert("請在這裡實現實際的 API 調用來轉換圖片為 PDF");
+				// 處理每張圖片
+				for (let i = 0; i < images.value.length; i++) {
+					const image = images.value[i];
+					
+					// 如果不是第一張圖片，添加新頁面
+					if (i > 0) {
+						pdf.addPage();
+					}
+
+					// 創建臨時 Image 對象來獲取圖片尺寸
+					const img = new Image();
+					await new Promise((resolve, reject) => {
+						img.onload = resolve;
+						img.onerror = reject;
+						img.src = image.preview;
+					});
+
+					// 計算圖片在 PDF 中的尺寸（保持比例並適應頁面）
+					const imgWidth = img.width;
+					const imgHeight = img.height;
+					const ratio = imgWidth / imgHeight;
+
+					let pdfImgWidth = pageWidth - (margin * 2);
+					let pdfImgHeight = pdfImgWidth / ratio;
+
+					// 如果圖片高度超過頁面高度，重新計算
+					if (pdfImgHeight > pageHeight - (margin * 2)) {
+						pdfImgHeight = pageHeight - (margin * 2);
+						pdfImgWidth = pdfImgHeight * ratio;
+					}
+
+					// 計算居中位置
+					const x = (pageWidth - pdfImgWidth) / 2;
+					const y = (pageHeight - pdfImgHeight) / 2;
+
+					// 將圖片添加到 PDF
+					pdf.addImage(image.preview, 'JPEG', x, y, pdfImgWidth, pdfImgHeight);
+				}
+
+				// 生成 PDF Blob
+				const pdfBlob = pdf.output('blob');
+				pdfUrl.value = URL.createObjectURL(pdfBlob);
+
+				// 如果開啟「轉換後清除圖片」選項，清除 IndexedDB 和圖片列表
+				if (autoClearImages.value) {
+					await clearDB();
+					images.value = [];
+				}
+
 			} catch (error) {
 				console.error("轉換失敗:", error);
-				alert("轉換失敗，請重試");
+				alert("轉換失敗，請重試: " + error.message);
 			} finally {
 				isConverting.value = false;
 			}
@@ -305,6 +358,15 @@ export default {
 				link.href = pdfUrl.value;
 				link.download = `images_to_pdf_${Date.now()}.pdf`;
 				link.click();
+
+				// 如果開啟「下載後自動清除」選項
+				if (autoClearPDF.value) {
+					// 釋放 Blob URL
+					URL.revokeObjectURL(pdfUrl.value);
+					// 重置為初始狀態
+					pdfUrl.value = null;
+					isConverting.value = false;
+				}
 			}
 		};
 
@@ -364,6 +426,8 @@ export default {
 			isConverting,
 			pdfUrl,
 			dragIndex,
+			autoClearImages,
+			autoClearPDF,
 			triggerFileInput,
 			handleFileSelect,
 			handleDrop,
@@ -446,6 +510,47 @@ export default {
 
 .preview-header h3 {
 	color: var(--dark);
+}
+
+.header-actions {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.auto-clear-options {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+}
+
+.checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+	padding: 8px 12px;
+	background: var(--light);
+	border-radius: 6px;
+	transition: all 0.3s ease;
+	user-select: none;
+}
+
+.checkbox-label:hover {
+	background: var(--grey);
+}
+
+.checkbox-label input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
+	cursor: pointer;
+	accent-color: var(--primary);
+}
+
+.checkbox-label span {
+	font-size: 14px;
+	color: var(--dark);
+	white-space: nowrap;
 }
 
 .btn-clear {
@@ -695,6 +800,28 @@ export default {
 		flex-direction: column;
 		gap: 12px;
 		align-items: flex-start;
+	}
+
+	.header-actions {
+		flex-direction: column;
+		width: 100%;
+		gap: 12px;
+	}
+
+	.auto-clear-options {
+		width: 100%;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.checkbox-label {
+		width: 100%;
+		justify-content: flex-start;
+	}
+
+	.btn-clear {
+		width: 100%;
+		justify-content: center;
 	}
 
 	.action-buttons {

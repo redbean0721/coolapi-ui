@@ -2,7 +2,7 @@
 
 ## UI Version
 
-Current UI version: 2.0.8-dev
+Current UI version: 2.0.9-dev
 
 ## Reference
 

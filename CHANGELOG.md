@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.0.9-dev] - 2026-02-20
+### Added
+- Implemented actual image to PDF conversion functionality in `ImgToPDF.vue` using jsPDF library.
+- Added two auto-clear options with checkboxes (both enabled by default):
+  - Auto-clear images from IndexedDB after successful conversion.
+  - Auto-clear PDF blob and reset interface after download.
+- Added `jspdf` dependency for client-side PDF generation.
+
+### Changed
+- Enhanced `ImgToPDF.vue` to convert images to PDF entirely in the browser without backend API.
+- Updated PDF generation to automatically scale images to fit A4 page size while maintaining aspect ratio.
+- Improved user experience with automatic cleanup options to save browser storage and memory.
+
+
+## [2.0.8-dev] - 2025-11-19
+### Changed
+- ????
+
+
 ## [2.0.7-dev] - 2025-05-14
 ### Changed
 - Updated the year display in `App.vue` to be dynamic using JavaScript.
