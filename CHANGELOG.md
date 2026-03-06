@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.0.10-dev] - 2026-03-06
+### Added
+- Added PWA support via site.webmanifest and app icons.
+- Added service worker (sw.js) for basic cache/offline capability.
+
+### Changed
+- Updated `index.html` meta/manifest links for installability on mobile and desktop.
+- Registered service worker in `main.js` to enable PWA features.
+
+
 ## [2.0.9-dev] - 2026-02-20
 ### Added
 - Implemented actual image to PDF conversion functionality in `ImgToPDF.vue` using jsPDF library.
