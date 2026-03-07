@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
 	{ path: '/', name: 'Home', component: () => import('./views/Home.vue') },
     { path: '/image', name: 'Image', component: () => import('./views/Image.vue') },
-    { path: '/tools/img2pdf', name: 'Img To PDF', component: () => import('./views/tools/ImgToPDF.vue') },
+    { path: '/tools/img-tools', name: 'Image Tools', component: () => import('./views/tools/ImgTools.vue') },
     { path: '/tools/remove-bg', name: 'Image Remove Background', component: () => import('./views/tools/RemoveBG.vue') },
     { path: '/minecraft/status', name: 'Minecraft Server Status', component: () => import('./views/Minecraft/Status.vue') },
     { path: '/minecraft/rcon', name: 'Minecraft RCON', component: () => import('./views/Minecraft/Rcon.vue') },

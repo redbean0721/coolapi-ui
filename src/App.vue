@@ -16,7 +16,7 @@
 
 			<li @click.prevent="toggleToolsMenu"><a href="#"><i class='bx bx-code-block'></i>Tools<i class="bx" :class="toolsOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i></a></li>
 			<template v-if="toolsOpen">
-				<li :class="{ active: route.path === '/tools/img2pdf' }" style="margin-left: 20px;"><router-link to="/tools/img2pdf"><i class="bx bx-file-blank"></i>Img To PDF</router-link></li>
+				<li :class="{ active: route.path === '/tools/img-tools' }" style="margin-left: 20px;"><router-link to="/tools/img-tools"><i class="bx bx-file-blank"></i>Image Tools</router-link></li>
 				<li :class="{ active: route.path === '/tools/remove-bg' }" style="margin-left: 20px;"><router-link to="/tools/remove-bg"><i class="bx bx-file-blank"></i>Remove BG</router-link></li>
 			</template>
 

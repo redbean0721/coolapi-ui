@@ -1,11 +1,11 @@
 <template>
     <div class="header">
 		<div class="left">
-			<h1>Image To PDF</h1>
+			<h1>Image Tools</h1>
 			<ul class="breadcrumb">
 				<li><a href="#">CoolAPI</a></li>
 				/
-				<li><a href="#" class="active">Image To PDF</a></li>
+				<li><a href="#" class="active">Image Tools</a></li>
 			</ul>
 		</div>
     </div>
@@ -43,16 +43,127 @@
 					<div class="auto-clear-options">
 						<label class="checkbox-label">
 							<input type="checkbox" v-model="autoClearImages" />
-							<span>轉換後清除圖片</span>
+							<span>處理後清除圖片</span>
 						</label>
 						<label class="checkbox-label">
-							<input type="checkbox" v-model="autoClearPDF" />
+							<input type="checkbox" v-model="autoClearResult" />
 							<span>下載後自動清除</span>
 						</label>
 					</div>
 					<button @click="clearAll" class="btn-clear">
 						<i class="bx bx-trash"></i> 清除全部
 					</button>
+				</div>
+			</div>
+
+			<!-- 模式切換 TAB -->
+			<div class="mode-tabs">
+				<button 
+					class="tab-btn" 
+					:class="{ active: mode === 'compress' }"
+					@click="mode = 'compress'"
+				>
+					<i class="bx bx-image"></i>
+					壓縮圖片
+				</button>
+				<button 
+					class="tab-btn" 
+					:class="{ active: mode === 'pdf' }"
+					@click="mode = 'pdf'"
+				>
+					<i class="bx bx-file-blank"></i>
+					轉為 PDF
+				</button>
+				<button 
+					class="tab-btn" 
+					:class="{ active: mode === 'both' }"
+					@click="mode = 'both'"
+				>
+					<i class="bx bx-layer"></i>
+					壓縮後轉 PDF
+				</button>
+			</div>
+
+			<!-- 配置區域 -->
+			<div class="config-area">
+				<!-- 壓縮設定 -->
+				<div v-if="mode === 'compress' || mode === 'both'" class="config-section">
+					<button class="config-toggle" :class="{ 'open': isCompressionConfigOpen }" @click="isCompressionConfigOpen = !isCompressionConfigOpen">
+						<h4><i class="bx bx-slider"></i> 壓縮設定</h4>
+						<i class="bx" :class="isCompressionConfigOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+					</button>
+					<div v-show="isCompressionConfigOpen" class="config-grid">
+						<div class="config-item">
+							<label>圖片品質：{{ Math.round(compressionOptions.quality * 100) }}%</label>
+							<input 
+								type="range" 
+								v-model.number="compressionOptions.quality" 
+								min="0.1" 
+								max="1" 
+								step="0.1"
+								class="slider"
+							>
+							<span class="hint">品質越低，檔案越小</span>
+						</div>
+						<div class="config-item">
+							<label>最大寬度：{{ compressionOptions.maxWidth }}px</label>
+							<input 
+								type="range" 
+								v-model.number="compressionOptions.maxWidth" 
+								min="480" 
+								max="3840" 
+								step="120"
+								class="slider"
+							>
+						</div>
+						<div class="config-item">
+							<label>最大高度：{{ compressionOptions.maxHeight }}px</label>
+							<input 
+								type="range" 
+								v-model.number="compressionOptions.maxHeight" 
+								min="360" 
+								max="2160" 
+								step="120"
+								class="slider"
+							>
+						</div>
+					</div>
+				</div>
+
+				<!-- PDF 設定 -->
+				<div v-if="mode === 'pdf' || mode === 'both'" class="config-section">
+					<button class="config-toggle" :class="{ 'open': isPdfConfigOpen }" @click="isPdfConfigOpen = !isPdfConfigOpen">
+						<h4><i class="bx bx-file"></i> PDF 設定</h4>
+						<i class="bx" :class="isPdfConfigOpen ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+					</button>
+					<div v-show="isPdfConfigOpen" class="config-grid">
+						<div class="config-item">
+							<label>紙張尺寸</label>
+							<select v-model="pdfOptions.format" class="select-input">
+								<option value="a4">A4 (210 × 297 mm)</option>
+								<option value="letter">Letter (216 × 279 mm)</option>
+								<option value="a3">A3 (297 × 420 mm)</option>
+							</select>
+						</div>
+						<div class="config-item">
+							<label>頁面方向</label>
+							<select v-model="pdfOptions.orientation" class="select-input">
+								<option value="portrait">直向 (Portrait)</option>
+								<option value="landscape">橫向 (Landscape)</option>
+							</select>
+						</div>
+						<div class="config-item">
+							<label>邊距：{{ pdfOptions.margin }}mm</label>
+							<input 
+								type="range" 
+								v-model.number="pdfOptions.margin" 
+								min="0" 
+								max="30" 
+								step="5"
+								class="slider"
+							>
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -82,26 +193,30 @@
 			<!-- 操作按鈕 -->
 			<div class="action-buttons">
 				<button 
-					@click="convertToPDF" 
+					@click="processImages" 
 					class="btn-convert"
-					:disabled="isConverting"
+					:disabled="isProcessing"
 				>
-					<i class="bx bx-loader-alt" v-if="isConverting"></i>
-					<i class="bx bx-file-blank" v-else></i>
-					{{ isConverting ? "轉換中..." : "轉換為 PDF" }}
+					<i class="bx bx-loader-alt" v-if="isProcessing"></i>
+					<i class="bx bx-image" v-else-if="mode === 'compress'"></i>
+					<i class="bx bx-file-blank" v-else-if="mode === 'pdf'"></i>
+					<i class="bx bx-layer" v-else></i>
+					{{ getProcessButtonText() }}
 				</button>
 			</div>
 		</div>
 
 		<!-- 下載區域 -->
-		<div v-if="pdfUrl" class="download-area">
+		<div v-if="resultUrl" class="download-area">
 			<div class="success-message">
 				<i class="bx bx-check-circle"></i>
-				<h3>PDF 轉換成功!</h3>
-				<p>您的 PDF 檔案已準備好下載</p>
+				<h3>處理成功!</h3>
+				<p v-if="mode === 'compress'">您的壓縮圖片已準備好下載 (ZIP 格式)</p>
+				<p v-else-if="mode === 'pdf'">您的 PDF 檔案已準備好下載</p>
+				<p v-else>您的壓縮版 PDF 檔案已準備好下載</p>
 			</div>
-			<button @click="downloadPDF" class="btn-download">
-				<i class="bx bx-download"></i> 下載 PDF
+			<button @click="downloadResult" class="btn-download">
+				<i class="bx bx-download"></i> 下載 {{ mode === 'compress' ? 'ZIP' : 'PDF' }}
 			</button>
 			<button @click="resetAll" class="btn-secondary">
 				<i class="bx bx-refresh"></i> 重新開始
@@ -138,9 +253,10 @@
 <script>
 import { ref, onMounted } from "vue";
 import jsPDF from "jspdf";
+import imageCompression from "browser-image-compression";
 
 // IndexedDB 操作
-const DB_NAME = "img2pdf_db";
+const DB_NAME = "img_tools_db";
 const STORE_NAME = "images";
 const DB_VERSION = 1;
 
@@ -212,12 +328,32 @@ export default {
 		const fileInput = ref(null);
 		const images = ref([]);
 		const isDragging = ref(false);
-		const isConverting = ref(false);
-		const pdfUrl = ref(null);
+		const isProcessing = ref(false);
+		const resultUrl = ref(null);
 		const dragIndex = ref(null);
 		const previewIndex = ref(null);
-		const autoClearImages = ref(true); // 預設開啟：轉換後清除圖片
-		const autoClearPDF = ref(true); // 預設開啟：下載後自動清除
+		const autoClearImages = ref(true);
+		const autoClearResult = ref(true);
+		
+		// 模式：compress（壓縮圖片）、pdf（轉PDF）、both（壓縮後轉PDF）
+		const mode = ref('compress');
+		
+		// 壓縮選項
+		const compressionOptions = ref({
+			quality: 0.8,
+			maxWidth: 1920,
+			maxHeight: 1080
+		});
+		
+		// PDF 選項
+		const pdfOptions = ref({
+			format: 'a4',
+			orientation: 'portrait',
+			margin: 10
+		});
+
+		const isCompressionConfigOpen = ref(false);
+		const isPdfConfigOpen = ref(false);
 
 		// 載入 IndexedDB 資料
 		const restoreImages = async () => {
@@ -277,103 +413,183 @@ export default {
 
 		const clearAll = () => {
 			images.value = [];
-			pdfUrl.value = null;
+			resultUrl.value = null;
 			clearDB();
 		};
 
-		const convertToPDF = async () => {
-			isConverting.value = true;
+		// 取得處理按鈕文字
+		const getProcessButtonText = () => {
+			if (isProcessing.value) return '處理中...';
+			if (mode.value === 'compress') return '壓縮圖片';
+			if (mode.value === 'pdf') return '轉換為 PDF';
+			return '壓縮後轉 PDF';
+		};
+
+		// 壓縮單張圖片
+		const compressImage = async (file) => {
+			const options = {
+				maxSizeMB: 10,
+				maxWidthOrHeight: Math.max(compressionOptions.value.maxWidth, compressionOptions.value.maxHeight),
+				useWebWorker: true,
+				initialQuality: compressionOptions.value.quality
+			};
+			
 			try {
-				// 創建 PDF 文檔（A4 尺寸）
-				const pdf = new jsPDF({
-					orientation: 'portrait',
-					unit: 'mm',
-					format: 'a4'
-				});
+				const compressedFile = await imageCompression(file, options);
+				return compressedFile;
+			} catch (error) {
+				console.error('壓縮圖片失敗:', error);
+				throw error;
+			}
+		};
 
-				const pageWidth = pdf.internal.pageSize.getWidth();
-				const pageHeight = pdf.internal.pageSize.getHeight();
-				const margin = 10; // 邊距 10mm
+		// 主要處理函數
+		const processImages = async () => {
+			isProcessing.value = true;
+			try {
+				if (mode.value === 'compress') {
+					await compressOnly();
+				} else if (mode.value === 'pdf') {
+					await convertToPDF(false);
+				} else {
+					await convertToPDF(true);
+				}
+			} catch (error) {
+				console.error('處理失敗:', error);
+				alert('處理失敗，請重試: ' + error.message);
+			} finally {
+				isProcessing.value = false;
+			}
+		};
 
-				// 處理每張圖片
+		// 只壓縮圖片（輸出 ZIP）
+		const compressOnly = async () => {
+			try {
+				const JSZip = (await import('jszip')).default;
+				const zip = new JSZip();
+				
 				for (let i = 0; i < images.value.length; i++) {
 					const image = images.value[i];
-					
-					// 如果不是第一張圖片，添加新頁面
-					if (i > 0) {
-						pdf.addPage();
-					}
-
-					// 創建臨時 Image 對象來獲取圖片尺寸
-					const img = new Image();
-					await new Promise((resolve, reject) => {
-						img.onload = resolve;
-						img.onerror = reject;
-						img.src = image.preview;
-					});
-
-					// 計算圖片在 PDF 中的尺寸（保持比例並適應頁面）
-					const imgWidth = img.width;
-					const imgHeight = img.height;
-					const ratio = imgWidth / imgHeight;
-
-					let pdfImgWidth = pageWidth - (margin * 2);
-					let pdfImgHeight = pdfImgWidth / ratio;
-
-					// 如果圖片高度超過頁面高度，重新計算
-					if (pdfImgHeight > pageHeight - (margin * 2)) {
-						pdfImgHeight = pageHeight - (margin * 2);
-						pdfImgWidth = pdfImgHeight * ratio;
-					}
-
-					// 計算居中位置
-					const x = (pageWidth - pdfImgWidth) / 2;
-					const y = (pageHeight - pdfImgHeight) / 2;
-
-					// 將圖片添加到 PDF
-					pdf.addImage(image.preview, 'JPEG', x, y, pdfImgWidth, pdfImgHeight);
+					const compressedFile = await compressImage(image.file);
+					zip.file(`compressed_${i + 1}_${image.file.name}`, compressedFile);
 				}
-
-				// 生成 PDF Blob
-				const pdfBlob = pdf.output('blob');
-				pdfUrl.value = URL.createObjectURL(pdfBlob);
-
-				// 如果開啟「轉換後清除圖片」選項，清除 IndexedDB 和圖片列表
+				
+				const zipBlob = await zip.generateAsync({ type: 'blob' });
+				resultUrl.value = URL.createObjectURL(zipBlob);
+				
 				if (autoClearImages.value) {
 					await clearDB();
 					images.value = [];
 				}
-
 			} catch (error) {
-				console.error("轉換失敗:", error);
-				alert("轉換失敗，請重試: " + error.message);
-			} finally {
-				isConverting.value = false;
+				if (error.message.includes('Cannot find module')) {
+					alert('壓縮圖片功能需要先安裝 jszip:\n\nyarn add jszip\n\n安裝後重新載入頁面即可使用。');
+				}
+				throw error;
 			}
 		};
 
-		const downloadPDF = () => {
-			if (pdfUrl.value) {
+		// 轉換為 PDF（可選壓縮）
+		const convertToPDF = async (shouldCompress = false) => {
+			// 創建 PDF 文檔
+			const pdf = new jsPDF({
+				orientation: pdfOptions.value.orientation,
+				unit: 'mm',
+				format: pdfOptions.value.format
+			});
+
+			const pageWidth = pdf.internal.pageSize.getWidth();
+			const pageHeight = pdf.internal.pageSize.getHeight();
+			const margin = pdfOptions.value.margin;
+
+			// 處理每張圖片
+			for (let i = 0; i < images.value.length; i++) {
+				const image = images.value[i];
+				
+				// 如果不是第一張圖片，添加新頁面
+				if (i > 0) {
+					pdf.addPage();
+				}
+
+				// 如果需要壓縮，先壓縮圖片
+				let imageData = image.preview;
+				if (shouldCompress) {
+					const compressedFile = await compressImage(image.file);
+					imageData = await new Promise((resolve) => {
+						const reader = new FileReader();
+						reader.onload = (e) => resolve(e.target.result);
+						reader.readAsDataURL(compressedFile);
+					});
+				}
+
+				// 創建臨時 Image 對象來獲取圖片尺寸
+				const img = new Image();
+				await new Promise((resolve, reject) => {
+					img.onload = resolve;
+					img.onerror = reject;
+					img.src = imageData;
+				});
+
+				// 計算圖片在 PDF 中的尺寸（保持比例並適應頁面）
+				const imgWidth = img.width;
+				const imgHeight = img.height;
+				const ratio = imgWidth / imgHeight;
+
+				let pdfImgWidth = pageWidth - (margin * 2);
+				let pdfImgHeight = pdfImgWidth / ratio;
+
+				// 如果圖片高度超過頁面高度，重新計算
+				if (pdfImgHeight > pageHeight - (margin * 2)) {
+					pdfImgHeight = pageHeight - (margin * 2);
+					pdfImgWidth = pdfImgHeight * ratio;
+				}
+
+				// 計算居中位置
+				const x = (pageWidth - pdfImgWidth) / 2;
+				const y = (pageHeight - pdfImgHeight) / 2;
+
+				// 將圖片添加到 PDF
+				pdf.addImage(imageData, 'JPEG', x, y, pdfImgWidth, pdfImgHeight);
+			}
+
+			// 生成 PDF Blob
+			const pdfBlob = pdf.output('blob');
+			resultUrl.value = URL.createObjectURL(pdfBlob);
+
+			// 如果開啟「處理後清除圖片」選項
+			if (autoClearImages.value) {
+				await clearDB();
+				images.value = [];
+			}
+		};
+
+		const downloadResult = () => {
+			if (resultUrl.value) {
 				const link = document.createElement("a");
-				link.href = pdfUrl.value;
-				link.download = `images_to_pdf_${Date.now()}.pdf`;
+				link.href = resultUrl.value;
+				
+				const timestamp = Date.now();
+				if (mode.value === 'compress') {
+					link.download = `compressed_images_${timestamp}.zip`;
+				} else {
+					link.download = `images_${mode.value === 'both' ? 'compressed_' : ''}${timestamp}.pdf`;
+				}
+				
 				link.click();
 
 				// 如果開啟「下載後自動清除」選項
-				if (autoClearPDF.value) {
-					// 釋放 Blob URL
-					URL.revokeObjectURL(pdfUrl.value);
-					// 重置為初始狀態
-					pdfUrl.value = null;
-					isConverting.value = false;
+				if (autoClearResult.value) {
+					URL.revokeObjectURL(resultUrl.value);
+					resultUrl.value = null;
+					isProcessing.value = false;
 				}
 			}
 		};
 
 		const resetAll = () => {
 			images.value = [];
-			pdfUrl.value = null;
-			isConverting.value = false;
+			resultUrl.value = null;
+			isProcessing.value = false;
 			clearDB();
 		};
 
@@ -423,18 +639,24 @@ export default {
 			fileInput,
 			images,
 			isDragging,
-			isConverting,
-			pdfUrl,
+			isProcessing,
+			resultUrl,
 			dragIndex,
+			mode,
+			compressionOptions,
+			pdfOptions,
+			isCompressionConfigOpen,
+			isPdfConfigOpen,
 			autoClearImages,
-			autoClearPDF,
+			autoClearResult,
 			triggerFileInput,
 			handleFileSelect,
 			handleDrop,
 			removeImage,
 			clearAll,
-			convertToPDF,
-			downloadPDF,
+			processImages,
+			getProcessButtonText,
+			downloadResult,
 			resetAll,
 			onDragStart,
 			onDragOver,
@@ -506,6 +728,187 @@ export default {
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 20px;
+}
+
+/* 模式切換 TAB */
+.mode-tabs {
+	display: flex;
+	gap: 12px;
+	margin-bottom: 24px;
+	background: var(--light);
+	padding: 8px;
+	border-radius: 12px;
+}
+
+.tab-btn {
+	flex: 1;
+	padding: 16px 24px;
+	border: 2px solid transparent;
+	border-radius: 8px;
+	background: transparent;
+	color: var(--dark-grey);
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+.tab-btn i {
+	font-size: 20px;
+}
+
+.tab-btn:hover {
+	background: var(--grey);
+	color: var(--dark);
+}
+
+.tab-btn.active {
+	background: var(--primary);
+	color: white;
+	border-color: var(--primary);
+}
+
+/* 配置區域 */
+.config-area {
+	margin-bottom: 24px;
+}
+
+.config-section {
+	background: var(--light);
+	padding: 24px;
+	border-radius: 12px;
+	margin-bottom: 16px;
+}
+
+.config-toggle {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: transparent;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+.config-toggle.open {
+	margin-bottom: 16px;
+}
+
+.config-toggle i.bx-chevron-up,
+.config-toggle i.bx-chevron-down {
+	font-size: 24px;
+	color: var(--dark-grey);
+}
+
+.config-section h4 {
+	color: var(--dark);
+	margin-bottom: 0;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 18px;
+}
+
+.config-section h4 i {
+	font-size: 22px;
+	color: var(--primary);
+}
+
+.config-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
+}
+
+.config-item {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.config-item label {
+	font-weight: 600;
+	color: var(--dark);
+	font-size: 14px;
+}
+
+.config-item .hint {
+	font-size: 12px;
+	color: var(--dark-grey);
+	margin-top: -4px;
+}
+
+.slider {
+	width: 100%;
+	height: 6px;
+	border-radius: 3px;
+	background: var(--grey);
+	outline: none;
+	appearance: none;
+	-webkit-appearance: none;
+	cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: var(--primary);
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+	transform: scale(1.2);
+	box-shadow: 0 0 8px var(--primary);
+}
+
+.slider::-moz-range-thumb {
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: var(--primary);
+	cursor: pointer;
+	border: none;
+	transition: all 0.3s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+	transform: scale(1.2);
+	box-shadow: 0 0 8px var(--primary);
+}
+
+.select-input {
+	padding: 12px 16px;
+	border: 2px solid var(--grey);
+	border-radius: 8px;
+	background: var(--light);
+	color: var(--dark);
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.select-input option {
+	background: var(--light);
+	color: var(--dark);
+}
+
+.select-input:hover {
+	border-color: var(--primary);
+}
+
+.select-input:focus {
+	outline: none;
+	border-color: var(--primary);
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .preview-header h3 {
@@ -822,6 +1225,20 @@ export default {
 	.btn-clear {
 		width: 100%;
 		justify-content: center;
+	}
+
+	.mode-tabs {
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.tab-btn {
+		padding: 12px 16px;
+		font-size: 14px;
+	}
+
+	.config-grid {
+		grid-template-columns: 1fr;
 	}
 
 	.action-buttons {

@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.11-dev] - 2026-03-07
+### Added
+- Added browser-side image compression support using `browser-image-compression`.
+- Added three processing modes in Image Tools: compress images, convert to PDF, and compress then convert to PDF.
+- Added ZIP output for batch compressed images via `jszip`.
+- Added collapsible setting panels for compression/PDF options to reduce page height.
+
+### Changed
+- Refactored the original image-to-PDF page into a unified Image Tools workflow.
+
+
 ## [2.0.10-dev] - 2026-03-06
 ### Added
 - Added PWA support via site.webmanifest and app icons.
