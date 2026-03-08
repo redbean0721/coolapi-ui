@@ -323,6 +323,13 @@ async function clearDB() {
 	return tx.complete;
 }
 
+// 將 base64 data URL 轉換為 File 對象
+function dataURLtoFile(dataURL, filename, mimeType) {
+	return fetch(dataURL)
+		.then(res => res.blob())
+		.then(blob => new File([blob], filename, { type: mimeType }));
+}
+
 export default {
 	setup() {
 		const fileInput = ref(null);
@@ -358,10 +365,14 @@ export default {
 		// 載入 IndexedDB 資料
 		const restoreImages = async () => {
 			const dbImages = await loadImagesFromDB();
-			images.value = dbImages.map(img => ({
-				file: { name: img.name, type: img.fileType },
-				preview: img.preview
-			}));
+			// 將 base64 重建為真正的 File 對象
+			const restoredImages = await Promise.all(
+				dbImages.map(async (img) => ({
+					file: await dataURLtoFile(img.preview, img.name, img.fileType),
+					preview: img.preview
+				}))
+			);
+			images.value = restoredImages;
 		};
 
 		onMounted(() => {

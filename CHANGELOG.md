@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.12-dev] - 2026-03-08
+### Added
+- Added Stale-While-Revalidate caching strategy in Service Worker for optimal performance.
+
+### Fixed
+- Fixed "The file given is not an instance of Blob or File" error by reconstructing File objects from base64 data.
+
+
 ## [2.0.11-dev] - 2026-03-07
 ### Added
 - Added browser-side image compression support using `browser-image-compression`.
